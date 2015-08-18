@@ -1,0 +1,10 @@
+<resources>
+    <string-array name="listEntries">
+        <item>@string/pref_sortby_label_popular</item>
+        <item>@string/pref_sortby_label_rating</item>
+    </string-array>
+    <string-array name="listValues">
+        <item>@string/pref_sortby_popular</item>
+        <item>@string/pref_sortby_rating</item>
+    </string-array>
+</resources>
