@@ -203,7 +203,7 @@ protected void onCreate(Bundle savedInstanceState) {
                 final String SORT_PARAM = "sort_by";
                 final String API_KEY = "api_key";
 
-                //Enter API Key here or @strings.xml REPLACE_API_KEY
+                //Enter API Key here REPLACE_API_KEY
 
                 String REPLACE_API_KEY = getResources().getString(R.string.REPLACE_API_KEY);
 
@@ -235,9 +235,9 @@ protected void onCreate(Bundle savedInstanceState) {
 
                 String line;
                 while((line=reader.readLine())!= null){
-                    // Since it's JSON, adding a newline isn't necessary (it won't affect parsing)
-                    // But it does make debugging a *lot* easier if you print out the completed
-                    // buffer for debugging.
+                    // Since it's JSON, adding a newline isn't necessary
+                    // but makes easier to read in the debugger
+
                     buffer.append(line + '\n');
                 }
                 if(buffer.length() == 0){
@@ -249,7 +249,7 @@ protected void onCreate(Bundle savedInstanceState) {
 
 
             }catch (IOException e){
-                // If the code didn't successfully get the data, there's no point in attemping
+                // If the code didn't successfully get the data, there's no point in attempting
                 // to parse it.
                 Log.e(LOG_TAG, "Error", e);
                 return null;
