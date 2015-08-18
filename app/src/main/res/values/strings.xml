@@ -11,6 +11,6 @@
     <string name="pref_sortby_label_popular">Most Popular</string>
     <string name="pref_sortby_label_rating">Highest Rating</string>
 
-    <string name="pref_sortby_popular" translatable="false">popularity.desc</string>
-    <string name="pref_sortby_rating" translable = "false">vote_average.desc</string>
+    <string name="pref_sortby_popular">popularity.desc</string>
+    <string name="pref_sortby_rating">vote_average.desc</string>
 </resources>
