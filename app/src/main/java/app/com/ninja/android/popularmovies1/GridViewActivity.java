@@ -17,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -31,15 +32,15 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class GridViewActivity extends ActionBarActivity {
 
+    private static final String STATE_MOVIES ="state movies" ;
     private GridView gridView;
     ImageAdapter imageAdapter;
     private SharedPreferences sharedPrefs;
-    List<MovieInfo> movieDetailsObj;
+    ArrayList<MovieInfo> movieDetailsObj;
 
     public GridViewActivity() {
 
@@ -48,32 +49,56 @@ public class GridViewActivity extends ActionBarActivity {
     @Override
     public void onStart() {
         super.onStart();
-        movieDetailsObj = new ArrayList<MovieInfo>();
-        updateMoviesList();
+
+
+
     }
 
 @Override
 protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+
+
     setContentView(R.layout.activity_main);
 
 
-        gridView = (GridView) findViewById(R.id.gridview);
-        imageAdapter = new ImageAdapter(this);
+    gridView = (GridView) findViewById(R.id.gridview);
+    imageAdapter = new ImageAdapter(this);
 
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                MovieInfo obj = (MovieInfo) imageAdapter.getItem(position);
+    gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            MovieInfo obj = (MovieInfo) imageAdapter.getItem(position);
 
-                Intent intent = new Intent(getApplicationContext(), MovieDetails.class);
+            Intent intent = new Intent(getApplicationContext(), MovieDetails.class);
 
-                intent.putExtra("MovieInfo", obj);
-                startActivity(intent);
-            }
-        });
+            intent.putExtra("MovieInfo", obj);
+            startActivity(intent);
+        }
+    });
 
+
+    if (savedInstanceState != null) {
+        movieDetailsObj = savedInstanceState.getParcelableArrayList(STATE_MOVIES);
+        imageAdapter.setUseLatest(movieDetailsObj);
+
+        Toast.makeText(GridViewActivity.this, "SavedInstance is NOT null", Toast.LENGTH_SHORT).show();
+    } else {
+
+        movieDetailsObj = new ArrayList<MovieInfo>();
+        updateMoviesList();
+        Toast.makeText(GridViewActivity.this, "Polling data", Toast.LENGTH_SHORT).show();
+        Toast.makeText(GridViewActivity.this, "SavedInstance is null", Toast.LENGTH_SHORT).show();
     }
+}
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState){
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList(STATE_MOVIES, movieDetailsObj);
+    }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -116,6 +141,7 @@ protected void onCreate(Bundle savedInstanceState) {
             mContext = context;
         }
 
+
         @Override
         //return the no. of Views to be displayed
         public int getCount() {
@@ -132,6 +158,10 @@ protected void onCreate(Bundle savedInstanceState) {
             return 0;
         }
 
+        // Method to use the latest data retrived when the activity is restarted
+        public void setUseLatest(ArrayList<MovieInfo> relist) {
+            imageAdapter = imageAdapter;
+        }
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             ImageView view = (ImageView) convertView;
@@ -139,7 +169,9 @@ protected void onCreate(Bundle savedInstanceState) {
                 view = new ImageView(mContext);
                 view.setLayoutParams(new GridView.LayoutParams(200, 300));
                 view.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
             }
+
 
             //Picasso
             Picasso.with(mContext)
@@ -149,6 +181,7 @@ protected void onCreate(Bundle savedInstanceState) {
                     .into(view);
             return view;
         }
+
 
     }
 
@@ -282,6 +315,8 @@ protected void onCreate(Bundle savedInstanceState) {
             gridView.setAdapter(imageAdapter);
 
         }
+
+
     }
 
 }

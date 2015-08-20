@@ -34,7 +34,8 @@ public class MovieDetails extends Activity{
 
 
         TextView releaseDate = (TextView) findViewById(R.id.releaseDate);
-        String str = obj.getReleaseDate().substring(0,4);
+        String str = obj.getReleaseDate()
+                .substring(0,4);
         releaseDate.setText(str);
 
 
