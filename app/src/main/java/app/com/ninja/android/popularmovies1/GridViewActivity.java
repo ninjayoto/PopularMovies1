@@ -17,7 +17,6 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -46,13 +45,6 @@ public class GridViewActivity extends ActionBarActivity {
 
  }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-
-
-
-    }
 
 @Override
 protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +56,16 @@ protected void onCreate(Bundle savedInstanceState) {
 
     gridView = (GridView) findViewById(R.id.gridview);
     imageAdapter = new ImageAdapter(this);
+
+    if (savedInstanceState != null) {
+        movieDetailsObj = savedInstanceState.getParcelableArrayList(STATE_MOVIES);
+        gridView.setAdapter(imageAdapter);
+
+    } else {
+        movieDetailsObj = new ArrayList<MovieInfo>();
+        updateMoviesList();
+
+    }
 
     gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
         @Override
@@ -78,24 +80,13 @@ protected void onCreate(Bundle savedInstanceState) {
     });
 
 
-    if (savedInstanceState != null) {
-        movieDetailsObj = savedInstanceState.getParcelableArrayList(STATE_MOVIES);
-        imageAdapter.setUseLatest(movieDetailsObj);
-
-        Toast.makeText(GridViewActivity.this, "SavedInstance is NOT null", Toast.LENGTH_SHORT).show();
-    } else {
-
-        movieDetailsObj = new ArrayList<MovieInfo>();
-        updateMoviesList();
-        Toast.makeText(GridViewActivity.this, "Polling data", Toast.LENGTH_SHORT).show();
-        Toast.makeText(GridViewActivity.this, "SavedInstance is null", Toast.LENGTH_SHORT).show();
-    }
 }
 
     @Override
     protected void onSaveInstanceState(Bundle outState){
         super.onSaveInstanceState(outState);
         outState.putParcelableArrayList(STATE_MOVIES, movieDetailsObj);
+
     }
 
 
@@ -112,9 +103,10 @@ protected void onCreate(Bundle savedInstanceState) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
+        int id = item.getItemId();
         if (id == R.id.action_settings) {
+
             Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);
             return true;
@@ -122,7 +114,6 @@ protected void onCreate(Bundle savedInstanceState) {
 
         return super.onOptionsItemSelected(item);
     }
-
 
 
     private void updateMoviesList() {
@@ -158,10 +149,7 @@ protected void onCreate(Bundle savedInstanceState) {
             return 0;
         }
 
-        // Method to use the latest data retrived when the activity is restarted
-        public void setUseLatest(ArrayList<MovieInfo> relist) {
-            imageAdapter = imageAdapter;
-        }
+
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             ImageView view = (ImageView) convertView;
@@ -219,9 +207,11 @@ protected void onCreate(Bundle savedInstanceState) {
                         res.getString(OVERVIEW),
                         res.getString(RELEASEDATE),
                         res.getDouble(RATING)));
+
             }
 
             return resultImageStrs;
+
         }
         @Override
         protected String[] doInBackground(Void... params) {
@@ -300,6 +290,7 @@ protected void onCreate(Bundle savedInstanceState) {
 
             try {
                 return getMovieDataFromJson(movieJSONString);
+
             } catch (JSONException e) {
                 Log.e(LOG_TAG, e.getMessage(), e);
                 e.printStackTrace();
@@ -314,9 +305,9 @@ protected void onCreate(Bundle savedInstanceState) {
             imageAdapter.notifyDataSetChanged();
             gridView.setAdapter(imageAdapter);
 
+
         }
-
-
+        
     }
 
 }
