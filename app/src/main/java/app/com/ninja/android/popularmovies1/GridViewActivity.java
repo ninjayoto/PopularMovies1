@@ -17,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -43,7 +44,16 @@ public class GridViewActivity extends ActionBarActivity {
 
     public GridViewActivity() {
 
+
  }
+    SharedPreferences.OnSharedPreferenceChangeListener spChanged = new
+            SharedPreferences.OnSharedPreferenceChangeListener() {
+                @Override
+                public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
+                                                      String key) {
+//                    updateMoviesList();
+                }
+            };
 
 
 @Override
@@ -57,15 +67,21 @@ protected void onCreate(Bundle savedInstanceState) {
     gridView = (GridView) findViewById(R.id.gridview);
     imageAdapter = new ImageAdapter(this);
 
-    if (savedInstanceState != null) {
-        movieDetailsObj = savedInstanceState.getParcelableArrayList(STATE_MOVIES);
-        gridView.setAdapter(imageAdapter);
 
-    } else {
+
+
+
+//    if (savedInstanceState != null && sharedPrefs==spChanged) {
+//        movieDetailsObj = savedInstanceState.getParcelableArrayList(STATE_MOVIES);
+//        gridView.setAdapter(imageAdapter);
+//
+//
+//    } else {
         movieDetailsObj = new ArrayList<MovieInfo>();
         updateMoviesList();
+        Toast.makeText(this, "Downloading data", Toast.LENGTH_LONG).show();
 
-    }
+//    }
 
     gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
         @Override
@@ -113,6 +129,23 @@ protected void onCreate(Bundle savedInstanceState) {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (sharedPrefs == spChanged) {
+//            movieDetailsObj = savedInstanceState.getParcelableArrayList(STATE_MOVIES);
+            gridView.setAdapter(imageAdapter);
+
+
+        } else {
+            movieDetailsObj = new ArrayList<MovieInfo>();
+            updateMoviesList();
+            Toast.makeText(this, "Downloading data", Toast.LENGTH_LONG).show();
+
+        }
     }
 
 
@@ -307,7 +340,7 @@ protected void onCreate(Bundle savedInstanceState) {
 
 
         }
-        
+
     }
 
 }
