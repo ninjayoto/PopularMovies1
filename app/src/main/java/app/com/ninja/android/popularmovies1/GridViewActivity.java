@@ -46,14 +46,7 @@ public class GridViewActivity extends ActionBarActivity {
 
 
  }
-    SharedPreferences.OnSharedPreferenceChangeListener spChanged = new
-            SharedPreferences.OnSharedPreferenceChangeListener() {
-                @Override
-                public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
-                                                      String key) {
-//                    updateMoviesList();
-                }
-            };
+
 
 
 @Override
@@ -67,16 +60,12 @@ protected void onCreate(Bundle savedInstanceState) {
     gridView = (GridView) findViewById(R.id.gridview);
     imageAdapter = new ImageAdapter(this);
 
-
-
-
-
 //    if (savedInstanceState != null && sharedPrefs==spChanged) {
 //        movieDetailsObj = savedInstanceState.getParcelableArrayList(STATE_MOVIES);
 //        gridView.setAdapter(imageAdapter);
 //
-//
-//    } else {
+// } else {
+
         movieDetailsObj = new ArrayList<MovieInfo>();
         updateMoviesList();
         Toast.makeText(this, "Downloading data", Toast.LENGTH_LONG).show();
@@ -131,12 +120,22 @@ protected void onCreate(Bundle savedInstanceState) {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    protected void onResume() {
+
+    SharedPreferences.OnSharedPreferenceChangeListener spChanged = new
+            SharedPreferences.OnSharedPreferenceChangeListener() {
+                @Override
+                public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
+                                                      String key) {
+//                    updateMoviesList();
+                }
+            };
+
+//    @Override
+    protected void onResume(Bundle savedInstanceState) {
         super.onResume();
 
-        if (sharedPrefs == spChanged) {
-//            movieDetailsObj = savedInstanceState.getParcelableArrayList(STATE_MOVIES);
+        if (savedInstanceState !=null && sharedPrefs == spChanged) {
+           movieDetailsObj = savedInstanceState.getParcelableArrayList(STATE_MOVIES);
             gridView.setAdapter(imageAdapter);
 
 
