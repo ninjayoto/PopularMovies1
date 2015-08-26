@@ -67,8 +67,8 @@ protected void onCreate(Bundle savedInstanceState) {
 // } else {
 
         movieDetailsObj = new ArrayList<MovieInfo>();
-        updateMoviesList();
-        Toast.makeText(this, "Downloading data", Toast.LENGTH_LONG).show();
+       updateMoviesList();
+       Toast.makeText(this, "Downloading data Oncreate", Toast.LENGTH_LONG).show();
 
 //    }
 
@@ -121,6 +121,12 @@ protected void onCreate(Bundle savedInstanceState) {
     }
 
 
+
+//Change to   sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+//because the sharedPrefs is not the same type as spChanged
+//seems that sharedPrefs always is different than spChanged
+
+
     SharedPreferences.OnSharedPreferenceChangeListener spChanged = new
             SharedPreferences.OnSharedPreferenceChangeListener() {
                 @Override
@@ -130,19 +136,19 @@ protected void onCreate(Bundle savedInstanceState) {
                 }
             };
 
-//    @Override
-    protected void onResume(Bundle savedInstanceState) {
+   @Override
+    protected void onResume() {
         super.onResume();
 
-        if (savedInstanceState !=null && sharedPrefs == spChanged) {
-           movieDetailsObj = savedInstanceState.getParcelableArrayList(STATE_MOVIES);
-            gridView.setAdapter(imageAdapter);
+        if (sharedPrefs == spChanged) {
+           //movieDetailsObj = savedInstanceState.getParcelableArrayList(STATE_MOVIES);
+            //gridView.setAdapter(imageAdapter);
 
 
         } else {
             movieDetailsObj = new ArrayList<MovieInfo>();
             updateMoviesList();
-            Toast.makeText(this, "Downloading data", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Downloading data onResume", Toast.LENGTH_LONG).show();
 
         }
     }
